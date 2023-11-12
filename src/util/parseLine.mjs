@@ -1,5 +1,6 @@
 import normalizeTabs from "./normalizeTabs.mjs"
 import parseDirectiveLine from "./parseDirectiveLine.mjs"
+import normalizePath from "./normalizePath.mjs"
 
 const valid_path_types = ["d:", "f:", "l:"]
 
@@ -50,6 +51,6 @@ export default function(input) {
 	return {
 		is_optional,
 		path_type: path_type[0],
-		path, owner, file_mode
+		path: normalizePath(path), owner, file_mode
 	}
 }
