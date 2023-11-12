@@ -1,16 +1,5 @@
 import escapeshellarg from "./util/escapeshellarg.mjs"
-
-function mapFileMode(path_type, file_mode) {
-	if (file_mode !== "default") {
-		return file_mode
-	}
-
-	if (path_type === "d") {
-		return "0750"
-	}
-
-	return "0640"
-}
+import mapFileMode from "./util/mapFileMode.mjs"
 
 function createTestCondition(path_type, path) {
 	// make sure directories REALLY are directories
