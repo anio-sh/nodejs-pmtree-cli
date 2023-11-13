@@ -5,6 +5,8 @@ import parseMainEntryFile from "./parseMainEntryFile.mjs"
 import entryToString from "./entryToString.mjs"
 import readFileString from "./util/readFileString.mjs"
 
+import checkAndRemoveDuplicates from "./checkAndRemoveDuplicates.mjs"
+
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
@@ -13,7 +15,9 @@ export default async function(input_file) {
 		path.resolve(__dirname, "template.sh")
 	)
 
-	const entries = await parseMainEntryFile(input_file)
+	let entries = await parseMainEntryFile(input_file)
+
+	entries = checkAndRemoveDuplicates(entries)
 
 	for (const entry of entries) {
 		output += entryToString(entry)
