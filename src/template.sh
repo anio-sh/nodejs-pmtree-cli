@@ -4,7 +4,7 @@ ran_without_errors="yes"
 allow_optionals_to_be_missing="no"
 
 if [ $# -eq 1 ]; then
-    if [ "$1" = "--optionals" ]; then
+    if [ "$1" = "--allow-missing-optionals" ]; then
         allow_optionals_to_be_missing="yes"
     else
         printf "Invalid argument '%s'\n" "$1" >&2

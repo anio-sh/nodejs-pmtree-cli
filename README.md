@@ -37,7 +37,7 @@ Apply the permissions (on target system):
 
 To allow for missing optional entries (marked with a leading `?`) invoke the script with:
 
-`$ ./output.sh --optionals`
+`$ ./output.sh --allow-missing-optionals`
 
 ---
 

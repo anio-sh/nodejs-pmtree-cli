@@ -1,32 +1,43 @@
 import escapeshellarg from "./util/escapeshellarg.mjs"
 import mapFileMode from "./util/mapFileMode.mjs"
 
-function createTestCondition(path_type, path) {
-	// make sure directories REALLY are directories
-	// and not a symbolic link to a directory
-	if (path_type === "d") {
-		return `[ -d ${path} ] && [ ! -L ${path} ]`
-	}
-	// make sure files REALLY are files
-	// and not a symbolic link to a file
-	else if (path_type === "f") {
-		return `[ -f ${path} ] && [ ! -L ${path} ]`
-	}
+function convertEntryToComment(entry) {
+	const file_mode = entry.file_mode !== null ? ` ${entry.file_mode}` : ""
+	const opt = entry.is_optional ? "?" : ""
 
-	return `[ -L ${path} ]`
-}
-
-function generateErrorPrintf(escaped_path, skipped = false) {
-	return `printf "${(skipped ? "skipped: " : "")}path '%s' does not exist or has the wrong type\\n" ${escaped_path} >&2`
+	return `# ${opt}${entry.path_type}:${entry.path} ${entry.owner}${file_mode}`
 }
 
 export default function(entry) {
 	const {path_type} = entry
 	const escaped_path = escapeshellarg(entry.path)
+	const path_noun = entry.is_optional ? "Optional Path" : "Path"
 
 	let str = "\n"
 
-	str += `if ${createTestCondition(path_type, escaped_path)}; then\n`
+	str += `${convertEntryToComment(entry)}\n`
+	str += `result="$(pmtree_get_path_type ${escaped_path})"\n`
+
+	str += `if [ "$result" = "-" ]; then\n`
+	str += `    printf "${path_noun} '%s' does not exist!" ${escaped_path} >&2\n`
+
+	// depending on whether the entry is optional or not
+	// an error is flagged
+	if (entry.is_optional) {
+		// only flag as error if script was not invoked with --allow-missing-optionals
+		str += `    if [ "$allow_optionals_to_be_missing" != "yes" ]; then\n`
+		str += `        printf " (this is an error)\\n"\n`
+		str += `        ran_without_errors="no"\n`
+		str += `    else\n`
+		str += `        printf " (skipping)\\n"\n`
+		str += `    fi\n`
+	} else {
+		// always flag it as an error when entry is NOT optional
+		str += `    printf " (this is an error)\\n"\n`
+		str += `    ran_without_errors="no"\n`
+	}
+
+	str += `elif [ "$result" = "${path_type}" ]; then\n`
 	str += `    chown -h ${escapeshellarg(entry.owner)} ${escaped_path}\n`
 
 	if (entry.file_mode) {
@@ -35,18 +46,11 @@ export default function(entry) {
 
 	str += `else\n`
 
-	// check if optionals should exist or not with flag
-	if (!entry.is_optional) {
-		str += `    ${generateErrorPrintf(escaped_path)}\n`
-		str += `    ran_without_errors="no"\n`
-	} else {
-		str += `    if [ "$allow_optionals_to_be_missing" = "no" ]; then\n`
-		str += `        ${generateErrorPrintf(escaped_path)}\n`
-		str += `        ran_without_errors="no"\n`
-		str += `    else\n`
-		str += `        ${generateErrorPrintf(escaped_path, true)}\n`
-		str += `    fi\n`
-	}
+	str += `    printf "${path_noun} '%s' is a %s but expected it to be a %s. (this is always an error)\\n" \\\n`
+	str += `        ${escaped_path} \\\n`
+	str += `        "$(pmtree_path_type_to_noun "$result")" \\\n`
+	str += `        "$(pmtree_path_type_to_noun "${path_type}")" >&2\n`
+	str += `    ran_without_errors="no"\n`
 
 	str += `fi\n`
 
