@@ -17,6 +17,9 @@ try {
 	const actual = result.toString().trimEnd()
 
 	if (expected !== actual) {
+		process.stderr.write(`expected: ${expected.split("\n").join(",")}\n`)
+		process.stderr.write(`actual  : ${actual.split("\n").join(",")}\n`)
+
 		throw new Error(`Output does not match.`)
 	}
 
