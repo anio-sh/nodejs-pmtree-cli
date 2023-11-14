@@ -1,4 +1,4 @@
-# permtree
+# pmtree
 
 ## Introduction
 
