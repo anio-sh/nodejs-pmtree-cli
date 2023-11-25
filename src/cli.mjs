@@ -1,8 +1,8 @@
-#!/usr/bin/env node
+#!/usr/bin/env node --experimental-detect-module
 import main from "./index.mjs"
 
 if (process.argv.length !== 3) {
-	process.stderr.write(`Usage: permtree <input-file>\n`)
+	process.stderr.write(`Usage: anio_pmtree <input-file>\n`)
 	process.exit(2)
 }
 
