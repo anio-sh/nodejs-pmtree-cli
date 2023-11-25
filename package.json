@@ -1,5 +1,5 @@
 {
   "devDependencies": {
-    "rollup": "^4.5.1"
+    "@anio-sh/bundler": "^0.0.2"
   }
 }

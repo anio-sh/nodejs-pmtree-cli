@@ -3,7 +3,8 @@ import { fileURLToPath } from "node:url"
 
 import parseMainEntryFile from "./parseMainEntryFile.mjs"
 import entryToString from "./entryToString.mjs"
-import readFileString from "./util/readFileString.mjs"
+
+import loadResource from "@anio-sh/bundler"
 
 import checkAndRemoveDuplicates from "./checkAndRemoveDuplicates.mjs"
 
@@ -11,14 +12,10 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 export default async function(input_file) {
-	let output = await readFileString(
-		path.resolve(__dirname, "template.sh")
-	)
+	let output = await loadResource("template.sh")
 
 	output += `\n# pmtree_fn.sh\n`
-	output += await readFileString(
-		path.resolve(__dirname, "pmtree_fn.sh")
-	)
+	output += await loadResource("pmtree_fn.sh")
 	output += `\n# pmtree_fn.sh\n`
 
 	let entries = await parseMainEntryFile(input_file)

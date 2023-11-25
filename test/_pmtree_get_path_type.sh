@@ -4,7 +4,7 @@
 # Do not directly run this file
 #
 
-source "src/pmtree_fn.sh"
+source "bundle.resources/pmtree_fn.sh"
 
 pmtree_get_path_type "test/fakeroot/regular-file"
 pmtree_get_path_type "test/fakeroot/link-to-regular-file"
