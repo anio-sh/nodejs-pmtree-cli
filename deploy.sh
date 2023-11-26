@@ -3,6 +3,7 @@
 npm i
 
 rm -f ./dist/pmtree.mjs
+rm -f ./dist/index.mjs
 
 ./node_modules/.bin/anio_bundler .
 
