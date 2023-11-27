@@ -1,4 +1,4 @@
-# pmtree [![Node.js CI](https://github.com/anio-software/pmtree/actions/workflows/test.yaml/badge.svg)](https://github.com/anio-software/pmtree/actions/workflows/test.yaml)
+# pmtree [![Node.js CI](https://github.com/anio-sh/pmtree/actions/workflows/test.yaml/badge.svg)](https://github.com/anio-sh/pmtree/actions/workflows/test.yaml)
 
 ## Introduction
 
