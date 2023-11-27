@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url"
 import parseMainEntryFile from "./parseMainEntryFile.mjs"
 import entryToString from "./entryToString.mjs"
 
-import loadResource from "@anio-sh/bundler"
+import {loadResource} from "@anio-sh/bundler"
 
 import checkAndRemoveDuplicates from "./checkAndRemoveDuplicates.mjs"
 
