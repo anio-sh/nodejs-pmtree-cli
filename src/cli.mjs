@@ -1,5 +1,6 @@
 #!/usr/bin/env node --experimental-detect-module
 import main from "./index.mjs"
+import process from "node:process"
 
 if (process.argv.length !== 3) {
 	process.stderr.write(`Usage: anio_pmtree <input-file>\n`)

@@ -1,3 +1,5 @@
+import process from "node:process"
+
 function entriesEqual(a, b) {
 	const fields = ["is_optional", "path_type", "path", "owner", "file_mode"]
 
